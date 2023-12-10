@@ -2,7 +2,7 @@
 Description=AEMET Exporter Timer
 
 [Timer]
-OnCalendar=Hourly
+OnCalendar=*-*-* *:20:00
 
 [Install]
 WantedBy=timers.target
