@@ -1,0 +1,8 @@
+[Unit]
+Description=AEMET Exporter Timer
+
+[Timer]
+OnCalendar=Hourly
+
+[Install]
+WantedBy=timers.target
