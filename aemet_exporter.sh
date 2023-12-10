@@ -52,7 +52,7 @@ weather_stats=$(
         (.fint | strptime(\"%Y-%m-%dT%H:%M:%S\") | todate | fromdate)
         ])
         | @tsv" |
-        $AWK '{printf "aemet_weather_conditions,station=%s temperature=%s,humidity=%s,pressure=%s,windspeed=%s,winddirection=%s,windgust=%s,precipitation=%s,dewpoint=%s, %s\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10}'
+        $AWK '{printf "aemet_weather_conditions,station=%s temperature=%s,humidity=%s,pressure=%s,windspeed=%s,winddirection=%s,windgust=%s,precipitation=%s,dewpoint=%s %s\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10}'
 )
 
 echo "$weather_stats" | $GZIP |
