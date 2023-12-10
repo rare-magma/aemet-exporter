@@ -64,7 +64,7 @@ INFLUXDB_API_TOKEN='ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3
 ORG='home'
 BUCKET='aemet'
 AEMET_API_KEY='ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3ZHFhc2RhCg=='
-AEMET_WEATHER_STATION_CODE='1234'
+AEMET_WEATHER_STATION_CODE='1234Y'
 ```
 
 - `INFLUXDB_HOST` should be the FQDN of the influxdb server.
@@ -73,7 +73,7 @@ AEMET_WEATHER_STATION_CODE='1234'
 - `INFLUXDB_API_TOKEN` should be the influxdb API token value.
   - This token should have write access to the `BUCKET` defined above.
 - `AEMET_API_KEY` should be the AEMET API key requested in the AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/altaUsuario?)
-- `AEMET_WEATHER_STATION_CODE` should be the numeric code assigned to the weather station. Can be found in AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/productosAEMET?) "Seleccione una estación" dropdown.
+- `AEMET_WEATHER_STATION_CODE` should be the alphanumeric code assigned to the weather station. Can be found in AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/productosAEMET?) "Seleccione una estación" dropdown.
 
 ## Troubleshooting
 
@@ -92,18 +92,24 @@ systemctl --user list-timers
 
 ## Exported metrics for each hour
 
+Weather stations might have a different set of sensors so not all metrics below might be populated.
+
 - temperature: `°C`
 - humidity: `%`
 - pressure: `hPa`
 - windspeed: `km/h`
+- windgust: `km/h`
 - winddirection: `°`
 - precipitation: `mm`
 - dewpoint: `°C`
+- visibility: `km`
+- insolation: `hours`
+- snow: `cm`
 
 ## Exported metrics example
 
 ```bash
-aemet_weather_conditions,station=3195 temperature=11.1,humidity=99.0,pressure=949.7,windspeed=0.9,winddirection=271.0,precipitation=0.0,dewpoint=11.0 1702206000
+aemet_weather_conditions,station=3195 temperature=11.1,humidity=99.0,pressure=949.7,windspeed=0.9,winddirection=271.0,windgust=2.9,precipitation=0.0,dewpoint=11.0,visibility=1.0,insolation=1.0,snow=0.0 1702206000
 ```
 
 ## Example grafana dashboard
@@ -151,7 +157,6 @@ Información elaborada por la Agencia Estatal de Meteorología © AEMET
 
 This project takes inspiration from the following:
 
-- [Noltari/AEMET-OpenData](https://github.com/Noltari/AEMET-OpenData)
 - [rare-magma/pbs-exporter](https://github.com/rare-magma/pbs-exporter)
 - [mad-ady/prometheus-borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
 - [OVYA/prometheus-borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)
