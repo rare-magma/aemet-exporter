@@ -68,8 +68,8 @@ AEMET_WEATHER_STATION_CODE='1234Y'
 ```
 
 - `INFLUXDB_HOST` should be the FQDN of the influxdb server.
-- `ORG` should be the name of the influxdb organization that contains the aemet price data bucket defined below.
-- `BUCKET` should be the name of the influxdb bucket that will hold the aemet price data.
+- `ORG` should be the name of the influxdb organization that contains the data bucket defined below.
+- `BUCKET` should be the name of the influxdb bucket that will hold the data.
 - `INFLUXDB_API_TOKEN` should be the influxdb API token value.
   - This token should have write access to the `BUCKET` defined above.
 - `AEMET_API_KEY` should be the AEMET API key requested in the AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/altaUsuario?)
