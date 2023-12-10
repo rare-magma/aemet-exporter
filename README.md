@@ -97,14 +97,13 @@ systemctl --user list-timers
 - pressure: `hPa`
 - windspeed: `km/h`
 - winddirection: `°`
-- windgust: `km/h`
 - precipitation: `mm`
 - dewpoint: `°C`
 
 ## Exported metrics example
 
 ```bash
-aemet_weather_conditions,station=3195 temperature=11.1,humidity=99.0,pressure=949.7,windspeed=0.9,winddirection=271.0,windgust=2.6,precipitation=0.0,dewpoint=11.0 1702206000
+aemet_weather_conditions,station=3195 temperature=11.1,humidity=99.0,pressure=949.7,windspeed=0.9,winddirection=271.0,precipitation=0.0,dewpoint=11.0 1702206000
 ```
 
 ## Example grafana dashboard
