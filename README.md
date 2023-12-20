@@ -10,16 +10,43 @@ Bash script that uploads the last 24h weather conditions from the AEMET OpenData
 - [gzip](https://www.gnu.org/software/gzip/)
 - [influxdb v2+](https://docs.influxdata.com/influxdb/v2.6/)
 - [jq](https://stedolan.github.io/jq/)
-- Optional: [make](https://www.gnu.org/software/make/) - for automatic installation support
 - [systemd](https://systemd.io/)
+- Optional:
+  - [make](https://www.gnu.org/software/make/) - for automatic installation support
+  - [docker](https://docs.docker.com/)
 
 ## Relevant documentation
 
 - [AEMET OpenData API](https://opendata.aemet.es)
 - [InfluxDB API](https://docs.influxdata.com/influxdb/v2.6/write-data/developer-tools/api/)
 - [Systemd Timers](https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+- [compose-scheduler](https://github.com/reddec/compose-scheduler)
 
 ## Installation
+
+### With Docker
+
+#### docker-compose
+
+1. Configure `aemet_exporter.conf` (see the configuration section below).
+1. Run it.
+
+   ```bash
+   docker compose up --detach
+   ```
+
+#### docker build & run
+
+1. Build the docker image.
+
+   ```bash
+   docker build . --tag aemet-exporter
+   ```
+
+1. Configure `aemet_exporter.conf` (see the configuration section below).
+1. Run it.
+
+   `docker run --rm --init --tty --interactive --volume $(pwd):/app localhost/aemet-exporter`
 
 ### With the Makefile
 
@@ -154,6 +181,8 @@ Delete the following files:
 ## Credits
 
 Información elaborada por la Agencia Estatal de Meteorología © AEMET
+
+- [reddec/compose-scheduler](https://github.com/reddec/compose-scheduler)
 
 This project takes inspiration from the following:
 
