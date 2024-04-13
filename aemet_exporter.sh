@@ -56,7 +56,7 @@ weather_stats=$(
         if has(\"vis\") then .vis else 0 end,
         if has(\"inso\") then .inso else 0 end,
         if has(\"nieve\") then .nieve else 0 end,
-        (.fint + \"Z\" | fromdate)
+        (.fint[0:18] + \"Z\" | fromdate)
         ])
         | @tsv" |
         $AWK '{printf "aemet_weather_conditions,station=%s temperature=%s,humidity=%s,pressure=%s,windspeed=%s,winddirection=%s,windgust=%s,precipitation=%s,dewpoint=%s,visibility=%s,insolation=%s,snow=%s %s\n", $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13}'
