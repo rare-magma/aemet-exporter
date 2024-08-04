@@ -46,7 +46,9 @@ Bash script that uploads the last 24h weather conditions from the AEMET OpenData
 1. Configure `aemet_exporter.conf` (see the configuration section below).
 1. Run it.
 
-   `docker run --rm --init --tty --interactive --volume $(pwd):/app localhost/aemet-exporter`
+   ```bash
+    docker run --rm --init --tty --interactive --read-only --cap-drop ALL --security-opt no-new-privileges:true --cpus 2 -m 64m --pids-limit 16 --volume ./aemet_exporter.conf:/app/aemet_exporter.conf:ro ghcr.io/rare-magma/aemet-exporter:latest
+    ```
 
 ### With the Makefile
 
