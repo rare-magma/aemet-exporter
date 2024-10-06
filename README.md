@@ -1,6 +1,6 @@
 # aemet-exporter
 
-Cli tool that uploads the last 24h weather conditions from the AEMET OpenData API to influxdb on a hourly basis
+CLI tool that uploads the last 24h weather conditions from the AEMET OpenData API to influxdb on a hourly basis
 
 ## Dependencies
 
@@ -58,22 +58,27 @@ $EDITOR $HOME/.config/aemet_exporter.json
 
 ### Manually
 
-1. Build `aemet_exporter` with `go build -ldflags="-s -w" -o aemet_exporter main.go`
+1. Build `aemet_exporter` with:
+
+   ```bash
+   go build -ldflags="-s -w" -o aemet_exporter main.go
+   ```
+
 2. Copy `aemet_exporter` to `$HOME/.local/bin/` and make it executable.
 
 3. Copy `aemet_exporter.json` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
 
 4. Copy the systemd unit and timer to `$HOME/.config/systemd/user/`:
 
-```bash
-cp aemet-exporter.* $HOME/.config/systemd/user/
-```
+   ```bash
+   cp aemet-exporter.* $HOME/.config/systemd/user/
+   ```
 
 5. and run the following command to activate the timer:
 
-```bash
-systemctl --user enable --now aemet-exporter.timer
-```
+   ```bash
+   systemctl --user enable --now aemet-exporter.timer
+   ```
 
 It's possible to trigger the execution by running manually:
 
