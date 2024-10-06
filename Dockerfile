@@ -1,4 +1,4 @@
-FROM docker.io/library/golang:alpine as builder
+FROM docker.io/library/golang:alpine AS builder
 WORKDIR /app
 ENV CGO_ENABLED=0
 COPY main.go go.mod ./
