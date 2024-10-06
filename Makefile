@@ -3,7 +3,6 @@ install:
 	@mkdir --parents $${HOME}/.local/bin \
 	&& mkdir --parents $${HOME}/.config/systemd/user \
 	&& cp aemet_exporter $${HOME}/.local/bin/ \
-	&& chmod +x $${HOME}/.local/bin/aemet_exporter \
 	&& cp --no-clobber aemet_exporter.json $${HOME}/.config/aemet_exporter.json \
 	&& chmod 400 $${HOME}/.config/aemet_exporter.json \
 	&& cp aemet-exporter.timer $${HOME}/.config/systemd/user/ \

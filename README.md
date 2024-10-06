@@ -64,7 +64,7 @@ $EDITOR $HOME/.config/aemet_exporter.json
    go build -ldflags="-s -w" -o aemet_exporter main.go
    ```
 
-2. Copy `aemet_exporter` to `$HOME/.local/bin/` and make it executable.
+2. Copy `aemet_exporter` to `$HOME/.local/bin/`.
 
 3. Copy `aemet_exporter.json` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
 
