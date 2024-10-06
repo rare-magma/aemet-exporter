@@ -1,19 +1,15 @@
 # aemet-exporter
 
-Bash script that uploads the last 24h weather conditions from the AEMET OpenData API to influxdb on a hourly basis
+Cli tool that uploads the last 24h weather conditions from the AEMET OpenData API to influxdb on a hourly basis
 
 ## Dependencies
 
-- [awk](https://www.gnu.org/software/gawk/manual/gawk.html)
-- [bash](https://www.gnu.org/software/bash/)
-- [curl](https://curl.se/)
-- [gzip](https://www.gnu.org/software/gzip/)
+- [go](https://go.dev/)
 - [influxdb v2+](https://docs.influxdata.com/influxdb/v2.6/)
-- [jq](https://stedolan.github.io/jq/)
-- [systemd](https://systemd.io/)
 - Optional:
   - [make](https://www.gnu.org/software/make/) - for automatic installation support
   - [docker](https://docs.docker.com/)
+  - [systemd](https://systemd.io/)
 
 ## Relevant documentation
 
@@ -28,7 +24,7 @@ Bash script that uploads the last 24h weather conditions from the AEMET OpenData
 
 #### docker-compose
 
-1. Configure `aemet_exporter.conf` (see the configuration section below).
+1. Configure `aemet_exporter.json` (see the configuration section below).
 1. Run it.
 
    ```bash
@@ -43,11 +39,11 @@ Bash script that uploads the last 24h weather conditions from the AEMET OpenData
    docker build . --tag aemet-exporter
    ```
 
-1. Configure `aemet_exporter.conf` (see the configuration section below).
+1. Configure `aemet_exporter.json` (see the configuration section below).
 1. Run it.
 
    ```bash
-    docker run --rm --init --tty --interactive --read-only --cap-drop ALL --security-opt no-new-privileges:true --cpus 2 -m 64m --pids-limit 16 --volume ./aemet_exporter.conf:/app/aemet_exporter.conf:ro ghcr.io/rare-magma/aemet-exporter:latest
+    docker run --rm --init --tty --interactive --read-only --cap-drop ALL --security-opt no-new-privileges:true --cpus 2 -m 64m --pids-limit 16 --volume ./aemet_exporter.json:/app/aemet_exporter.json:ro ghcr.io/rare-magma/aemet-exporter:latest
     ```
 
 ### With the Makefile
@@ -55,23 +51,25 @@ Bash script that uploads the last 24h weather conditions from the AEMET OpenData
 For convenience, you can install this exporter with the following command or follow the manual process described in the next paragraph.
 
 ```bash
+make build
 make install
-$EDITOR $HOME/.config/aemet_exporter.conf
+$EDITOR $HOME/.config/aemet_exporter.json
 ```
 
 ### Manually
 
-1. Copy `aemet_exporter.sh` to `$HOME/.local/bin/` and make it executable.
+1. Build `aemet_exporter` with `go build -ldflags="-s -w" -o aemet_exporter main.go`
+2. Copy `aemet_exporter` to `$HOME/.local/bin/` and make it executable.
 
-2. Copy `aemet_exporter.conf` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
+3. Copy `aemet_exporter.json` to `$HOME/.config/`, configure it (see the configuration section below) and make it read only.
 
-3. Copy the systemd unit and timer to `$HOME/.config/systemd/user/`:
+4. Copy the systemd unit and timer to `$HOME/.config/systemd/user/`:
 
 ```bash
 cp aemet-exporter.* $HOME/.config/systemd/user/
 ```
 
-4. and run the following command to activate the timer:
+5. and run the following command to activate the timer:
 
 ```bash
 systemctl --user enable --now aemet-exporter.timer
@@ -87,29 +85,31 @@ systemctl --user start aemet-exporter.service
 
 The config file has a few options:
 
-```bash
-INFLUXDB_HOST='influxdb.example.com'
-INFLUXDB_API_TOKEN='ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3ZHFhc2RhCg=='
-ORG='home'
-BUCKET='aemet'
-AEMET_API_KEY='ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3ZHFhc2RhCg=='
-AEMET_WEATHER_STATION_CODE='1234Y'
+```json
+{
+ "InfluxDBHost": "influxdb.example.com",
+ "InfluxDBApiToken": "ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3ZHFhc2RhCg==",
+ "Org": "home",
+ "Bucket": "aemet",
+ "AemetApiKey": "ZXhhbXBsZXRva2VuZXhhcXdzZGFzZGptcW9kcXdvZGptcXdvZHF3b2RqbXF3ZHFhc2RhCg==",
+ "AemetWeatherStationCode": "1234Y"
+}
 ```
 
-- `INFLUXDB_HOST` should be the FQDN of the influxdb server.
-- `ORG` should be the name of the influxdb organization that contains the data bucket defined below.
-- `BUCKET` should be the name of the influxdb bucket that will hold the data.
-- `INFLUXDB_API_TOKEN` should be the influxdb API token value.
-  - This token should have write access to the `BUCKET` defined above.
-- `AEMET_API_KEY` should be the AEMET API key requested in the AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/altaUsuario?)
-- `AEMET_WEATHER_STATION_CODE` should be the alphanumeric code assigned to the weather station. Can be found in AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/productosAEMET?) "Seleccione una estación" dropdown.
+- `InfluxDBHost` should be the FQDN of the influxdb server.
+- `Org` should be the name of the influxdb organization that contains the data bucket defined below.
+- `Bucket` should be the name of the influxdb bucket that will hold the data.
+- `InfluxDBApiToken` should be the influxdb API token value.
+  - This token should have write access to the `Bucket` defined above.
+- `AemetApiKey` should be the AEMET API key requested in the AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/altaUsuario?)
+- `AemetWeatherStationCode` should be the alphanumeric code assigned to the weather station. Can be found in AEMET OpenData's [website](https://opendata.aemet.es/centrodedescargas/productosAEMET?) "Seleccione una estación" dropdown.
 
 ## Troubleshooting
 
-Run the script manually with bash set to trace:
+Run the tool manually with go set to debug:
 
 ```bash
-bash -x $HOME/.local/bin/aemet_exporter.sh
+GODEBUG=http1debug=2 $HOME/.local/bin/aemet_exporter
 ```
 
 Check the systemd service logs and timer info with:
@@ -174,8 +174,8 @@ systemctl --user disable --now aemet-exporter.timer
 Delete the following files:
 
 ```bash
-~/.local/bin/aemet_exporter.sh
-~/.config/aemet_exporter.conf
+~/.local/bin/aemet_exporter
+~/.config/aemet_exporter.json
 ~/.config/systemd/user/aemet-exporter.timer
 ~/.config/systemd/user/aemet-exporter.service
 ```
@@ -185,9 +185,3 @@ Delete the following files:
 Información elaborada por la Agencia Estatal de Meteorología © AEMET
 
 - [reddec/compose-scheduler](https://github.com/reddec/compose-scheduler)
-
-This project takes inspiration from the following:
-
-- [rare-magma/pbs-exporter](https://github.com/rare-magma/pbs-exporter)
-- [mad-ady/prometheus-borg-exporter](https://github.com/mad-ady/prometheus-borg-exporter)
-- [OVYA/prometheus-borg-exporter](https://github.com/OVYA/prometheus-borg-exporter)

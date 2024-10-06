@@ -3,8 +3,8 @@ Description=AEMET Exporter
 After=network-online.target
 
 [Service]
-ExecStart=/home/%u/.local/bin/aemet_exporter.sh
-LoadCredential=creds:/home/%u/.config/aemet_exporter.conf
+ExecStart=/home/%u/.local/bin/aemet_exporter
+LoadCredential=creds:/home/%u/.config/aemet_exporter.json
 Type=oneshot
 
 # Security hardening options

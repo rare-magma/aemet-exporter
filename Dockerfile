@@ -1,9 +1,11 @@
-FROM docker.io/library/alpine:latest
-ENV RUNNING_IN_DOCKER=true
-ENTRYPOINT ["/bin/bash"]
-CMD ["/app/aemet_exporter.sh"]
-COPY aemet_exporter.sh /app/aemet_exporter.sh
-RUN addgroup -g 10001 user \
-    && adduser -H -D -u 10000 -G user user
-RUN apk add --quiet --no-cache bash curl jq
-USER user:user
+FROM docker.io/library/golang:1.22-alpine as builder
+WORKDIR /app
+ENV CGO_ENABLED=0
+COPY main.go go.mod ./
+RUN go build -ldflags "-s -w" -o aemet_exporter main.go
+
+FROM scratch
+WORKDIR /app
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/aemet_exporter /app/aemet_exporter
+ENTRYPOINT ["/app/aemet_exporter"]
