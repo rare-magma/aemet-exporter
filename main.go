@@ -96,6 +96,14 @@ func main() {
 		log.Fatalln("Error requesting data: ", err)
 	}
 	defer resp.Body.Close()
+	redirectStatusOK := resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusBadRequest
+	if !redirectStatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln("Error reading data: ", err)
+		}
+		log.Fatalln("Error fetching AEMET redirect URL: ", string(resp.Status), string(body))
+	}
 	aemetWeatherRedirectResp, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln("Error reading data: ", err)
@@ -112,6 +120,14 @@ func main() {
 		log.Fatalln("Error requesting data: ", err)
 	}
 	defer resp.Body.Close()
+	getStatusOK := resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusBadRequest
+	if !getStatusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln("Error reading data: ", err)
+		}
+		log.Fatalln("Error fetching AEMET data: ", string(resp.Status), string(body))
+	}
 	aemetWeatherData, err := io.ReadAll(aemetWeatherResp.Body)
 	if err != nil {
 		log.Fatalln("Error reading data: ", err)
@@ -165,11 +181,12 @@ func main() {
 		log.Fatalln("Error sending data: ", err)
 	}
 	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Fatalln("Error reading data: ", err)
-	}
-	if resp.StatusCode != 204 {
-		log.Fatal("Error sending data: ", string(body))
+	statusOK := resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices
+	if !statusOK {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Fatalln("Error reading data: ", err)
+		}
+		log.Fatalln("Error sending data: ", resp.Status, string(body))
 	}
 }
