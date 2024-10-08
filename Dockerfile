@@ -6,4 +6,4 @@ RUN go build -ldflags "-s -w" -trimpath -o app main.go
 
 FROM cgr.dev/chainguard/static:latest
 COPY --from=builder /app/app /usr/bin/app
-CMD ["/usr/bin/app"]
+ENTRYPOINT ["/usr/bin/app"]
