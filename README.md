@@ -111,12 +111,6 @@ The config file has a few options:
 
 ## Troubleshooting
 
-Run the tool manually with go set to debug:
-
-```bash
-GODEBUG=http1debug=2 $HOME/.local/bin/aemet_exporter
-```
-
 Check the systemd service logs and timer info with:
 
 ```bash
