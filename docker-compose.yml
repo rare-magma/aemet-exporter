@@ -20,7 +20,6 @@ services:
 
   aemet-exporter:
     image: ghcr.io/rare-magma/aemet-exporter:latest
-    init: true
     read_only: true
     cap_drop:
       - ALL
@@ -33,6 +32,6 @@ services:
           memory: 64m
           pids: 16
     volumes:
-      - ./aemet_exporter.json:/app/aemet_exporter.json:ro
+      - ./aemet_exporter.json:/aemet_exporter.json:ro
     labels:
       net.reddec.scheduler.cron: "20 * * * *"
