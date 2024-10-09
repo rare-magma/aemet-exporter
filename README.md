@@ -43,7 +43,7 @@ CLI tool that uploads the last 24h weather conditions from the AEMET OpenData AP
 1. Run it.
 
    ```bash
-    docker run --rm --init --tty --interactive --read-only --cap-drop ALL --security-opt no-new-privileges:true --cpus 2 -m 64m --pids-limit 16 --volume ./aemet_exporter.json:/app/aemet_exporter.json:ro ghcr.io/rare-magma/aemet-exporter:latest
+    docker run --rm --tty --interactive --read-only --cap-drop ALL --security-opt no-new-privileges:true --cpus 2 -m 64m --pids-limit 16 --volume ./aemet_exporter.json:/app/aemet_exporter.json:ro ghcr.io/rare-magma/aemet-exporter:latest
     ```
 
 ### With the Makefile
