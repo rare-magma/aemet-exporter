@@ -84,7 +84,8 @@ func (t *retryableTransport) RoundTrip(req *http.Request) (*http.Response, error
 		if req.Body != nil {
 			req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 		}
-		log.Printf("Retry (%d) of request to: %s", retries, req.URL)
+		log.Printf("Previous request failed with %s", resp.Status)
+		log.Printf("Retry %d of request to: %s", retries+1, req.URL)
 		resp, err = t.transport.RoundTrip(req)
 		retries++
 	}
