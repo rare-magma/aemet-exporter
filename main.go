@@ -56,6 +56,7 @@ const retryCount = 3
 
 func shouldRetry(err error, resp *http.Response) bool {
 	if err != nil {
+		log.Printf("Previous request failed with status: %s error: %s", resp.Status, err)
 		return true
 	}
 	switch resp.StatusCode {
@@ -84,7 +85,6 @@ func (t *retryableTransport) RoundTrip(req *http.Request) (*http.Response, error
 		if req.Body != nil {
 			req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 		}
-		log.Printf("Previous request failed with %s", resp.Status)
 		log.Printf("Retry %d of request to: %s", retries+1, req.URL)
 		resp, err = t.transport.RoundTrip(req)
 		retries++
