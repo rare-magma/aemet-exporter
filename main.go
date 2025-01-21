@@ -52,7 +52,7 @@ type retryableTransport struct {
 }
 
 const aemetApi = "https://opendata.aemet.es/opendata/api/observacion/convencional/datos/estacion/"
-const retryCount = 3
+const retryCount = 5
 
 func shouldRetry(err error, resp *http.Response) bool {
 	if err != nil {
@@ -78,7 +78,7 @@ func (t *retryableTransport) RoundTrip(req *http.Request) (*http.Response, error
 	resp, err := t.transport.RoundTrip(req)
 	retries := 0
 	for shouldRetry(err, resp) && retries < retryCount {
-		backoff := time.Duration(math.Pow(2, float64(retries))) * time.Second
+		backoff := time.Duration(math.Pow(2, float64(retries))) * time.Second * 10
 		time.Sleep(backoff)
 		if resp != nil && resp.Body != nil {
 			io.Copy(io.Discard, resp.Body)
