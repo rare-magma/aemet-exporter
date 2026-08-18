@@ -32,6 +32,6 @@ services:
           memory: 64m
           pids: 16
     volumes:
-      - ./aemet_exporter.json:/aemet_exporter.json:ro
+      - ./aemet_exporter.json:/tmp/aemet_exporter.json:ro
     labels:
       net.reddec.scheduler.cron: "20 * * * *"
